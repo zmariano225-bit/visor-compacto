@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Visor Compacto</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="card">
+    <div class="title">Visor compacto</div>
+    <div class="screen">
+      <div class="placeholder">Carga una imagen para comenzar</div>
+      <img id="displayImage" alt="Imagen cargada" />
+    </div>
+    <div class="buttons">
+      <!-- Fila 1 -->
+      <button class="btn" id="loadBtn">Cargar</button>
+      <button class="btn" id="nextBtn">Correr</button>
+      <button class="btn" id="removeCurrentBtn">Borrar actual</button>
+      <button class="btn" id="clearAllBtn">Borrar todo</button>
+      <!-- Fila 2 -->
+      <button class="btn" id="zoomInBtn">Zoom +</button>
+      <button class="btn" id="zoomOutBtn">Zoom –</button>
+      <button class="btn" id="rotateBtn">Rotar</button>
+      <button class="btn" id="downloadBtn">Descargar</button>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" multiple />
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
