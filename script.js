@@ -16,19 +16,21 @@
     if (img && ph) {
       img.style.display = 'none';
       ph.style.display = 'block';
-      log('Interfaz inicializada');
+      log('Interfaz inicializada. Índice actual:', currentIndex);
     }
   }
 
   function showImage() {
     const img = $('displayImage');
     const ph = $('placeholder');
+    log('Mostrando imagen. Índice actual:', currentIndex, 'Total imágenes:', images.length);
+
     if (currentIndex >= 0 && currentIndex < images.length && img && ph) {
       img.src = images[currentIndex];
       img.style.display = 'block';
       ph.style.display = 'none';
       img.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
-      log('Mostrando imagen:', images[currentIndex]);
+      log('Imagen mostrada:', images[currentIndex]);
     } else {
       init();
       log('No hay imágenes para mostrar');
@@ -61,7 +63,8 @@
           images.push(url);
           log('Imagen añadida:', url);
         });
-        currentIndex = images.length - 1;
+        currentIndex = images.length - 1;  // ← ¡AQUÍ ESTÁ EL PROBLEMA!
+        log('Índice actualizado a:', currentIndex);
         resetTransform();
         showImage();
       }
