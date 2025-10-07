@@ -1,0 +1,114 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #eef2f7 0%, #d1d9e6 100%);
+  font-family: 'Montserrat', sans-serif;
+  padding: 16px;
+}
+
+.card {
+  width: 100%;
+  max-width: 440px;
+  background: url('https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.82);
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #ff6b35;
+  text-align: center;
+  margin: 8px 0 14px 0;
+  letter-spacing: 0.8px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.screen {
+  width: 100%;
+  flex: 1;
+  min-height: 280px;
+  max-height: 60vh;
+  background-color: #f8f9fa;
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  position: relative;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.12);
+}
+
+.screen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+
+.screen .placeholder {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #999;
+  font-size: 15px;
+  text-align: center;
+  padding: 16px;
+  font-weight: 500;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.btn {
+  height: 40px;
+  border: none;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #333;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.btn:hover {
+  background: white;
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+input[type="file"] {
+  display: none;
+}
+
+@media (max-width: 380px) {
+  .btn { font-size: 11px; }
+  .title { font-size: 24px; }
+}
