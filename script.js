@@ -1,114 +1,152 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+(function() {
+  'use strict';
 
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #eef2f7 0%, #d1d9e6 100%);
-  font-family: 'Montserrat', sans-serif;
-  padding: 16px;
-}
+  let images = [];
+  let currentIndex = -1;
+  let scale = 1;
+  let rotation = 0;
 
-.card {
-  width: 100%;
-  max-width: 440px;
-  background: url('https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
-  border-radius: 24px;
-  padding: 18px;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.22);
-  backdrop-filter: blur(10px);
-  background-color: rgba(255, 255, 255, 0.82);
-  display: flex;
-  flex-direction: column;
-}
+  function $(id) { return document.getElementById(id); }
 
-.title {
-  font-family: 'Playfair Display', serif;
-  font-size: 26px;
-  font-weight: 700;
-  color: #ff6b35;
-  text-align: center;
-  margin: 8px 0 14px 0;
-  letter-spacing: 0.8px;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
+  function init() {
+    const img = $('displayImage');
+    const ph = $('placeholder');
+    if (img && ph) {
+      img.style.display = 'none';
+      ph.style.display = 'block';
+    }
+  }
 
-.screen {
-  width: 100%;
-  flex: 1;
-  min-height: 280px;
-  max-height: 60vh;
-  background-color: #f8f9fa;
-  border-radius: 18px;
-  overflow: hidden;
-  margin-bottom: 16px;
-  position: relative;
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.12);
-}
+  function showImage() {
+    const img = $('displayImage');
+    const ph = $('placeholder');
+    if (currentIndex >= 0 && currentIndex < images.length && img && ph) {
+      img.src = images[currentIndex];
+      img.style.display = 'block';
+      ph.style.display = 'none';
+      img.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
+    } else {
+      init();
+    }
+  }
 
-.screen img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: none;
-  transform-origin: center;
-  transition: transform 0.3s ease;
-}
+  function resetTransform() {
+    scale = 1;
+    rotation = 0;
+  }
 
-.screen .placeholder {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #999;
-  font-size: 15px;
-  text-align: center;
-  padding: 16px;
-  font-weight: 500;
-}
+  // Botón Cargar
+  if ($('loadBtn')) {
+    $('loadBtn').onclick = () => {
+      if ($('fileInput')) $('fileInput').click();
+    };
+  }
 
-.buttons {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
+  // Input de archivos
+  if ($('fileInput')) {
+    $('fileInput').onchange = (e) => {
+      const files = Array.from(e.target.files || []).filter(f => f.type.startsWith('image/'));
+      if (files.length > 0) {
+        files.forEach(file => {
+          const url = URL.createObjectURL(file);
+          images.push(url);
+        });
+        currentIndex = images.length - 1;
+        resetTransform();
+        showImage();
+      }
+    };
+  }
 
-.btn {
-  height: 40px;
-  border: none;
-  border-radius: 22px;
-  background: rgba(255, 255, 255, 0.95);
-  color: #333;
-  font-weight: 600;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 4px;
-}
+  // Correr
+  if ($('nextBtn')) {
+    $('nextBtn').onclick = () => {
+      if (images.length > 0) {
+        currentIndex = (currentIndex + 1) % images.length;
+        resetTransform();
+        showImage();
+      }
+    };
+  }
 
-.btn:hover {
-  background: white;
-  transform: translateY(-2px);
-}
+  // Borrar actual
+  if ($('removeCurrentBtn')) {
+    $('removeCurrentBtn').onclick = () => {
+      if (images.length > 0 && currentIndex >= 0) {
+        images.splice(currentIndex, 1);
+        if (images.length === 0) {
+          currentIndex = -1;
+        } else {
+          currentIndex = currentIndex % images.length;
+        }
+        resetTransform();
+        showImage();
+      }
+    };
+  }
 
-.btn:active {
-  transform: translateY(0);
-}
+  // Borrar todo
+  if ($('clearAllBtn')) {
+    $('clearAllBtn').onclick = () => {
+      images = [];
+      currentIndex = -1;
+      resetTransform();
+      showImage();
+      const input = $('fileInput');
+      if (input) input.value = '';
+    };
+  }
 
-input[type="file"] {
-  display: none;
-}
+  // Zoom +
+  if ($('zoomInBtn')) {
+    $('zoomInBtn').onclick = () => {
+      if (currentIndex >= 0) {
+        scale = Math.min(scale + 0.2, 3);
+        showImage();
+      }
+    };
+  }
 
-@media (max-width: 380px) {
-  .btn { font-size: 11px; }
-  .title { font-size: 24px; }
-}
+  // Zoom -
+  if ($('zoomOutBtn')) {
+    $('zoomOutBtn').onclick = () => {
+      if (currentIndex >= 0) {
+        scale = Math.max(scale - 0.2, 0.5);
+        showImage();
+      }
+    };
+  }
+
+  // Rotar
+  if ($('rotateBtn')) {
+    $('rotateBtn').onclick = () => {
+      if (currentIndex >= 0) {
+        rotation = (rotation + 90) % 360;
+        showImage();
+      }
+    };
+  }
+
+  // Descargar
+  if ($('downloadBtn')) {
+    $('downloadBtn').onclick = () => {
+      if (currentIndex >= 0) {
+        const link = document.createElement('a');
+        link.href = images[currentIndex];
+        link.download = 'imagen-visora.jpg';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        alert('No hay imagen para descargar.');
+      }
+    };
+  }
+
+  // Iniciar cuando el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
